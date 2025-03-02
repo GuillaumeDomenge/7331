@@ -4,7 +4,7 @@
 #include <string>
 
 int main() {
-    std::ifstream file("input.txt"); // Open the file
+    std::ifstream file("/home/guillaume/Documents/7331/AOC/day4/input.txt"); // Open the file
     if (!file) {
         std::cerr << "Error opening file!" << std::endl;
         return 1;
@@ -28,9 +28,7 @@ int main() {
     for(int i = 1; i < NLINES-1 ; i++){
         for(int j = 1; j < NCHAR-1 ; j++){
             if (lines[i][j] == 'A') { 
-                std::cout << "Here at A\n";
                 if (lines[i-1][j-1] == 'M' && lines[i+1][j+1] == 'S'){
-                    std::cout << "Here at B\n";
                     if (lines[i+1][j-1] == 'M' && lines[i-1][j+1] == 'S') {
                         count++;
                     }
@@ -39,7 +37,6 @@ int main() {
                     }
                 }
                 else if(lines[i-1][j-1] =='S' && lines[i+1][j+1] == 'M'){
-                    std::cout << "Here at B\n";
                     if (lines[i+1][j-1] == 'M' && lines[i-1][j+1] == 'S') {
                         count++;
                     }
