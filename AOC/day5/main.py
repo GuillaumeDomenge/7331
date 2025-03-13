@@ -21,6 +21,18 @@ def is_instruction_correct(instruction : list)-> bool:
                 return False
     return True
 
+def instructionCorrector(instruction : list)-> list:
+    instruction_length = len(instruction)
+    for i in range(instruction_length-1):
+        for j in range(i+1, instruction_length):
+            tString = instruction[j] + "|" + instruction[i]
+            if tString in rulesl:
+                tempVal = instruction[i]
+                instruction[i] = instruction[j]
+                instruction[j] = tempVal
+                return instructionCorrector(instruction)
+    return instruction
+
 inputt = get_data()
 
 rulesl = []
@@ -38,10 +50,15 @@ print(type(rulesl[0]))
 
 print("---------------------------------------------------------------------------------------")
 count = 0
+sumIncorrect = 0
 for page in pagesl:
     if is_instruction_correct(page):
         count+= int(page[math.floor(len(page)/2)])
-        #print(page)
+    else:
+        sumIncorrect += int(instructionCorrector(page)[math.floor(len(page)/2)])
+               #print(page)
+
+print(sumIncorrect)
 print(count)
 
 #print("The pages are: ")

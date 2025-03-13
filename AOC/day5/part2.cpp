@@ -51,14 +51,27 @@ bool isBreakingRule(const std::vector<std::string> &rules , const int &inti, con
 }
 
 int incorrectCorrector(const std::vector<std::string> &rules,const std::vector<int> &instruction) {
-  for (int i = 0; i < instruction.size()-2; i++) {
-    for (int j = i+1; j < instruction.size()-1; j++) {
+  for (int i = 0; i < instruction.size()-1; i++) {
+    for (int j = i+1; j < instruction.size(); j++) {
       if (isBreakingRule(rules,instruction[i],instruction[j])) {
-        std::iter_swap(instruction.begin() + i,instruction.begin() + j);  
-        return incorrectCorrector(rules, instruction);
+        std::vector<int> tempVec;
+        std::cout << "rule ("<< instruction[j] << "|" <<instruction[i] << ")" << std::endl;
+        for (int k = 0; k < instruction.size(); k++) {
+          if (k == i) {
+            tempVec.push_back(instruction[j]);
+          }else if (k == j) {
+            tempVec.push_back(instruction[i]);
+          }else {
+            tempVec.push_back(instruction[k]);
+          }
+        }
+        return incorrectCorrector(rules, tempVec);
       }
     }
   }
+  std::cout << "Turned into :";
+  printVector(instruction);
+  std::cout << std::endl;
   return instruction[ (int)std::floor( (double)instruction.size()/2)]; 
 }
 
@@ -166,7 +179,7 @@ int main() {
           is_correct = 0;
           std::cout << "    Instruction : ";
           printVector(instruction);
-          std::cout << " broke a rule at : " << std::endl;
+          std::cout << " broke a rule at : ";
           std::cout << "i = " << instruction[i]<< ", j = " << instruction[j] << std::endl;
           break;
         }
