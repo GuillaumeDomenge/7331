@@ -20,14 +20,23 @@ for i in range(0,10):
 # print(data3d[0])
 
 pathcounter = np.empty([nrows+2, ncols+2], dtype=object)
+pathcounterP2 = np.zeros([nrows+2, ncols+2])
 for i in range(nrows+2):
     for j in range(ncols+2):
         if data3d[9][i,j] == 1:
             pathcounter[i,j] = {(i,j)}
+            pathcounterP2[i,j] = 1
         else:
-            pathcounter[i,j] = {}
+            pathcounter[i,j] = {}  
 
 # print(data3d[8])
+def convoP2(ws, xs):
+    if ws.shape != xs.shape:
+        raise ValueError("Missmatch between array dimensions :" +str(ws.shape) + "!=" + str(xs.shape))
+    t_val = ws[0,1]*xs[0,1]+ws[1,0]*xs[1,0]+ws[1,2]*xs[1,2]+ws[2,1]*xs[2,1]
+    return t_val
+
+
 def convo(ws, xs):
     if ws.shape != xs.shape:
         raise ValueError("Missmatch between array dimensions :"+str(ws.shape) + "!=" + str(xs.shape))
@@ -44,7 +53,16 @@ def convo(ws, xs):
         t_val = t_val.union(xs[1,2])
 
     return t_val
-    
+
+def summerP2(arr1, arr2):
+    if arr1.shape != arr2.shape:
+        raise ValueError("Missmatch between array dimensions :" +str(arr1.shape) + "!=" + str(arr2.shape))
+    suma = 0
+    for i in range(arr1.shape[0]):
+        for j in range(arr1.shape[1]):
+            suma += arr2[i,j]*arr1[i,j] 
+    return suma
+
 def summer(arr1, arr2):
     if arr1.shape != arr2.shape:
         raise ValueError("Missmatch between array dimensions :"+str(arr1.shape) + "!=" + str(arr2.shape))
@@ -58,11 +76,15 @@ def summer(arr1, arr2):
 
 for k in range(1,10):
     t_k = 9-k 
-    # print(t_k)
-    # print(pathcounter)
+    print(t_k)
+    print(pathcounterP2)
     for i in range(nrows):
         for j in range(ncols):
             if data3d[t_k][i+1,j+1] == 1:
                 pathcounter[i+1,j+1] = convo(data3d[t_k+1][i:i+3,j:j+3],pathcounter[i:i+3,j:j+3])
+                pathcounterP2[i+1,j+1] = convoP2(data3d[t_k+1][i:i+3,j:j+3],pathcounterP2[i:i+3,j:j+3])*data3d[t_k][i+1,j+1]
 # print(pathcounter)
+print("Part 1 : ")
 print(summer(pathcounter, data3d[0]))
+print("Part 2 : ")
+print(summerP2(pathcounterP2, data3d[0]))
